@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Product</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900">
+    <div id="loader" class="loading d-none">
+    </div>
+    <div class="container">
+        <!-- form design -->
+        <div class="justify-center bg-white rounded-lg shadow-md mx-36 mt-5">
+            <div class="text-center text-xl p-2 text-gray-700 font-bold bg-slate-400">
+                UPDATE PRODUCT
+            </div>
+            <div class="mb-3 flex justify-center pt-4">
+                <div class="me-10">
+                    <input type="hidden" name="productID" id="productID">
+                    <label for="productName"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
+                    <input type="text" id="productName" name="productName"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md w-72 focus:ring-blue-500 focus:border-blue-500 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="me-10">
+                    <label for="productCode"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Code</label>
+                    <input type="text" id="productCode" name="productCode"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md w-72 focus:ring-blue-500 focus:border-blue-500 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="productImg" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product
+                        Image</label>
+                    <input type="text" id="productImg" name="productImg"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md w-72 focus:ring-blue-500 focus:border-blue-500 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+            </div>
+            <div class="mb-3 flex justify-center">
+                <div class="me-10">
+                    <label for="unitPrice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit
+                        Price</label>
+                    <input type="text" id="unitPrice" name="unitPrice"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md w-72 focus:ring-blue-500 focus:border-blue-500 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="me-10">
+                    <label for="productQty" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product
+                        Qty</label>
+                    <input type="text" id="productQty" name="productQty"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md w-72 focus:ring-blue-500 focus:border-blue-500 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="productTotal"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product
+                        Total</label>
+                    <input type="text" id="productTotal" name="productTotal"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md w-72 focus:ring-blue-500 focus:border-blue-500 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+            </div>
+            <div class="mb-3 text-center pb-4">
+                <button onclick="UpdateData()" type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 w-72 text-white font-bold py-1 px-4 rounded-md">
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/axios.min.js"></script>
+
+    <script>
+        fillExistingData();
+        async function fillExistingData() {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            let URL = `https://crud.teamrabbil.com/api/v1/ReadProductByID/${id}`;
+            document.getElementById('loader').classList.remove('d-none');
+            let result = await axios.get(URL);
+            document.getElementById('loader').classList.add('d-none');
+            if (result.status === 200) {
+                let data = result.data['data'][0];
+                document.getElementById('productID').value = data['_id'];
+                document.getElementById('productName').value = data['ProductName'];
+                document.getElementById('productCode').value = data['ProductCode'];
+                document.getElementById('productImg').value = data['ProductImg'];
+                document.getElementById('unitPrice').value = data['UnitPrice'];
+                document.getElementById('productQty').value = data['Qty'];
+                document.getElementById('productTotal').value = data['TotalPrice'];
+            }
+        }
+
+        async function UpdateData() {
+            let ProductID = document.getElementById('productID').value;
+            // alert(ProductID); return;
+            let ProductName = document.getElementById('productName').value;
+            let ProductCode = document.getElementById('productCode').value;
+            let ProductImg = document.getElementById('productImg').value;
+            let UnitPrice = document.getElementById('unitPrice').value;
+            let ProductQty = document.getElementById('productQty').value;
+            let ProductTotal = document.getElementById('productTotal').value;
+            let URL = `https://crud.teamrabbil.com/api/v1/UpdateProduct/${ProductID}`;
+            document.getElementById('loader').classList.remove('d-none');
+            let result = await axios.post(
+                URL, {
+                ProductName: ProductName,
+                ProductCode: ProductCode,
+                Img: ProductImg,
+                UnitPrice: UnitPrice,
+                Qty: ProductQty,
+                TotalPrice: ProductTotal
+            }
+            );
+            document.getElementById('loader').classList.add('d-none');
+            if (result.status === 200) {
+                window.location = "index.html";
+            }
+            else {
+                alert('Something Went Wrong');
+            }
+        }
+
+    </script>
+</body>
+
+</html>
